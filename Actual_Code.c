@@ -51,11 +51,11 @@ void pre_auton() {
 }
 
 /*
-All of the methods listed below are used during the autonomus period
+All of the methods listed below are used during the autonomous period
 */
 
 int cone = 0, mobilegoal = 0; // Statically defined variables cone - 0 is for down action and 1 is for up action and same for mobilegoal
-const double deviation = 2.0; // May need to change value of constant if it continues to deviate
+const double deviation = 2.0; // UPDATE: STILL NEED TO CHANGE VALUE TO AVOID DEVIATION DURING AUTONOMOUS
 
 void DriveU (int amount) {
 	motor[left1] = amount;
@@ -104,13 +104,11 @@ void StopMobileLift () {
 void MobileGoalU (int amount) {
 	motor[mobileLiftL] = motor[mobileLiftR] = -amount;
 	mobilegoal = 1;
-	//stopMobileLift();
 }
 
 void MobileGoalD (int amount) {
 	motor[mobileLiftL] = motor[mobileLiftR] = amount;
 	mobilegoal = 0;
-	//stopMobileLift();
 }
 
 void StopArmLift () { // Have to reset the arm motor values each time
@@ -197,7 +195,7 @@ void actual_autonomous (int pos) {
 
 		// Should have picked up the mobile-goal at this point
 		MobileGoalU(127);
-		wait1Msec(400);
+		wait1Msec(1000);
 		StopMobileLift();
 
 		// Stack cone onto mobile-goal
@@ -217,12 +215,12 @@ void actual_autonomous (int pos) {
 
 		// Turn around
 		TurnR(127); // Should turn around 180 degrees right
-		wait1Msec(1000);
+		wait1Msec(900);
 		TurnR(0);
 
 		// Drive into zone
 		DriveU(127);
-		wait1Msec(600); // May need to change value of argument
+		wait1Msec(800); // May need to change value of argument
 		DriveU(0);
 
 		// Unload mobile goal (with cone stacked on top)
@@ -262,7 +260,7 @@ void actual_autonomous (int pos) {
 
 		// Should have picked up the mobile-goal at this point
 		MobileGoalU(127);
-		wait1Msec(400);
+		wait1Msec(1000);
 		StopMobileLift();
 
 		// Stack cone onto mobile-goal
@@ -282,12 +280,12 @@ void actual_autonomous (int pos) {
 
 		// Turn around
 		TurnL(127); // Should turn around 180 degrees left
-		wait1Msec(1000);
+		wait1Msec(900);
 		TurnL(0);
 
 		// Drive into zone
 		DriveU(127);
-		wait1Msec(600); // May need to change value of argument
+		wait1Msec(800); // May need to change value of argument
 		DriveU(0);
 
 		// Unload mobile goal (with cone stacked on top)
@@ -325,8 +323,9 @@ void actual_autonomous (int pos) {
  */
 task autonomous() {
 	// Press Btn7L for starting on the left and Btn7R for starting on the right
-	if (vexRT[Btn7L] == 1) actual_autonomous(0);
-	else if (vexRT[BTn7R] == 1) actual_autonomous(1);
+	//if (vexRT[Btn7L] == 1) actual_autonomous(0);
+	//else if (vexRT[BTn7R] == 1) actual_autonomous(1);
+	actual_autonomous(0);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -366,15 +365,15 @@ task usercontrol() {
 		<<Claw Arm>>
 		*/
 		if (vexRT[Btn6U] == 1) {
-			motor[leftArm3] = -80;
-			motor[rightArm3]= -80;
-			motor[clawangle] = -75;
+			motor[leftArm3] = -100;
+			motor[rightArm3]= -100;
+			motor[clawangle] = -80;
 		}
 		else if (vexRT[Btn6D] == 1) {
-			motor[leftArm3] = 80;
-			motor[rightArm3] = 80;
-			motor[clawangle] = 75;
-			}
+			motor[leftArm3] = 100;
+			motor[rightArm3] = 100;
+			motor[clawangle] = 80;
+		}
 		else {
 			motor[leftArm3] = 0;
 			motor[rightArm3] = 0;
